@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_ui_2/book_appointment_page.dart';
 import 'package:flutter_ui_2/constant.dart';
+import 'package:flutter_ui_2/doctor_details_page.dart';
+import 'package:flutter_ui_2/next_appointment_page.dart';
+import 'package:flutter_ui_2/patient_info_page.dart';
+import 'package:flutter_ui_2/rate_us_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:lottie/lottie.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,11 +16,23 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  late final AnimationController _controller;
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Generated code for this homePage Widget...
-
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
@@ -27,41 +44,62 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 16, 0),
                 child: Row(
-                  mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Card(
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      color: Theme.of(context).cardColor,
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40),
-                      ),
-                      child: Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(2, 2, 2, 2),
-                        child: Container(
-                          width: 80,
-                          height: 80,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PatientInfoPage(
+                              patientName: 'User Name',
+                              patientAge: 33,
+                              patientGender: 'Female',
+                            ),
                           ),
-                          child: Image.asset(
-                            'assets/images/avatar.png',
-                            fit: BoxFit.cover,
+                        );
+                      },
+                      child: Card(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        color: Theme.of(context).cardColor,
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        child: Padding(
+                          padding:
+                              const EdgeInsetsDirectional.fromSTEB(2, 2, 2, 2),
+                          child: Container(
+                            width: 80,
+                            height: 80,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: Image.asset(
+                              'assets/images/avatar.png',
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                          // const Icon(
-                          //   Icons.person,
-                          //   size: 30,
-                          // ),
                         ),
                       ),
                     ),
+                    Lottie.asset(
+                      'assets/animation/animation.json',
+                      width: 150,
+                      controller: _controller,
+                      onLoaded: (composition) {
+                        // Configure the AnimationController with the duration of the
+                        // Lottie file and start the animation.
+                        _controller
+                          ..duration = composition.duration
+                          ..forward();
+                      },
+                    )
                   ],
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
                 child: Row(
@@ -71,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                       padding:
                           const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
                       child: Text(
-                        'Good Morning',
+                        greenting(DateTime.now()),
                         style: TextStyle(
                           fontFamily: 'Lexend Deca',
                           color: Theme.of(context).textTheme.bodySmall?.color,
@@ -160,7 +198,15 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const NextAppointmentPage(),
+                                    ),
+                                  );
+                                },
                                 icon: const Icon(
                                   Icons.chevron_right_rounded,
                                   size: 24,
@@ -213,7 +259,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 30,
                                 ),
                                 Column(
@@ -223,7 +269,7 @@ class _HomePageState extends State<HomePage> {
                                     Text(
                                       formatDayAndMonth(DateTime
                                           .now()), // Replace with your formatted date and time
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
                                       ),
@@ -231,7 +277,7 @@ class _HomePageState extends State<HomePage> {
                                     Text(
                                       formatTime(DateTime
                                           .now()), // Replace with your formatted date and time
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
                                       ),
@@ -252,7 +298,7 @@ class _HomePageState extends State<HomePage> {
 
               //Book Appointment Card
               Material(
-                color: Color(0xFF39d2c0),
+                color: const Color(0xFFf49da2),
                 elevation: 3,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -331,9 +377,9 @@ class _HomePageState extends State<HomePage> {
                 height: MediaQuery.of(context).size.height * 0.02,
               ),
 
-              //Contact Us Card
+              //Doctor Deatils Card
               Material(
-                color: Color(0xFF4b39ef),
+                color: const Color(0xFF2b91bf),
                 elevation: 3,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -349,7 +395,7 @@ class _HomePageState extends State<HomePage> {
                       await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const BookAppointmentPage(),
+                          builder: (context) => const DoctorDetailPage(),
                         ),
                       );
                     },
@@ -412,9 +458,9 @@ class _HomePageState extends State<HomePage> {
                 height: MediaQuery.of(context).size.height * 0.02,
               ),
 
-              //Contact Us Card
+              //Rate Us Card
               Material(
-                color: Color(0xFFfbaf7c),
+                color: const Color(0xFF2fa561),
                 elevation: 3,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -430,14 +476,14 @@ class _HomePageState extends State<HomePage> {
                       await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const BookAppointmentPage(),
+                          builder: (context) => const RateUsPage(),
                         ),
                       );
                     },
-                    child: const Row(
+                    child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Padding(
+                        const Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                             child: FaIcon(
@@ -447,14 +493,14 @@ class _HomePageState extends State<HomePage> {
                             )),
                         Expanded(
                           child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(10, 15, 10, 0),
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                10, 15, 10, 0),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Rate Last Appointment',
                                   style: TextStyle(
                                     fontFamily: 'Lexend Deca',
@@ -466,18 +512,28 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Expanded(
                                   child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 0, 0, 8),
-                                    child: Text(
-                                      'Contact your doctor directly for any questions or concerns.',
-                                      style: TextStyle(
-                                        fontFamily: 'Lexend Deca',
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              0, 0, 0, 8),
+                                      child: RatingBar.builder(
+                                        initialRating: 3,
+                                        minRating: 1,
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemPadding: const EdgeInsets.symmetric(
+                                            horizontal: 4.0),
+                                        itemBuilder: (context, _) => const Icon(
+                                          Icons.star,
+                                          color: Colors.yellow,
+                                        ),
+                                        onRatingUpdate: (rating) {
+                                          setState(() {
+                                            userRating =
+                                                rating; // Update the userRating variable when the rating is updated
+                                          });
+                                        },
+                                      )),
                                 ),
                               ],
                             ),
